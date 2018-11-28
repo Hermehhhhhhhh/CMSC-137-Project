@@ -8,11 +8,11 @@ import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 
 public class Main extends JPanel implements ActionListener{
-	private final int B_WIDTH = 500; //board width temporary lang
-	private final int B_HEIGHT = 500; // height
+	private final int B_WIDTH = 800; //board width temporary lang
+	private final int B_HEIGHT = 800; // height
 	private final int DOT_SIZE = 10; //food
-	private final int ALL_DOTS = 2500; //total food
-	private final int RAND_POS = 49; //position
+	private final int ALL_DOTS = 6400; //total food
+	private final int RAND_POS = 79; //position
 	private final int DELAY = 140;
 	//foods
 	private final int ALL_C = 30;
