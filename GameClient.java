@@ -7,7 +7,11 @@ import java.io.*;
 import client.ChatClient;
 import client.GameGUI;
 
-public class GameClient{
+import java.awt.*;
+import javax.swing.*;
+
+
+public class GameClient extends JFrame{
   private static Scanner sc = new Scanner(System.in);
   private static String inGameName;
   private static String password;
@@ -26,7 +30,12 @@ public class GameClient{
 
   public static void main(String args[]){
 
-    GameGUI gameUI = new GameGUI();
+    EventQueue.invokeLater(new Runnable(){
+      @Override
+      public void run(){
+        JFrame gameUI = new GameClient();
+      }
+    });
 
 
     // // connect to server
@@ -57,6 +66,15 @@ public class GameClient{
     //     }
     //   }
     // }
+  }
+
+  public GameClient(){
+    add(new GameGUI());
+    setResizable(false);
+    pack();
+
+    setLocationRelativeTo(null);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
 
   public static void startChat(){
