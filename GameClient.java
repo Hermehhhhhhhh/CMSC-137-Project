@@ -1,17 +1,15 @@
+package client;
 import proto.TcpPacketProtos.TcpPacket.*;
 import proto.TcpPacketProtos.TcpPacket;
 import proto.PlayerProtos.Player;
 import java.util.Scanner;
 import java.net.*;
 import java.io.*;
+
 import client.ChatClient;
 import client.GameGUI;
 
-import java.awt.*;
-import javax.swing.*;
-
-
-public class GameClient extends JFrame{
+public class GameClient{
   private static Scanner sc = new Scanner(System.in);
   private static String inGameName;
   private static String password;
@@ -26,75 +24,63 @@ public class GameClient extends JFrame{
   private static boolean inLobby = false;
   private static String lobbyId;
   public static int option;
-
-
-  public static void main(String args[]){
-
-    EventQueue.invokeLater(new Runnable(){
-      @Override
-      public void run(){
-        JFrame gameUI = new GameClient();
-      }
-    });
-
-
-    // // connect to server
-    // connectToServer();
-    //
-    // // Create a GameClient
-    // createPlayer();
-    //
-    // while(isClosed == false){
-    //   if(inLobby == false){
-    //     getOption();
-    //     if(option == 1){
-    //       createLobby();
-    //       connectToLobby();
-    //       if(inLobby == true){
-    //         startChat();
-    //       }
-    //     }else if(option == 2){
-    //       System.out.print("Lobby ID: ");
-    //       lobbyId = sc.nextLine();
-    //       connectToLobby();
-    //       if(inLobby == true){
-    //         startChat();
-    //       }
-    //     }else{
-    //       disconnectToServer();
-    //       break;
-    //     }
-    //   }
-    // }
-  }
+  public static GameGUI gameUI;
 
   public GameClient(){
-    add(new GameGUI());
-    setResizable(false);
-    pack();
+    gameUI = new GameGUI(this);
+  }
 
-    setLocationRelativeTo(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+  public static void main(String args[]){
+    // connect to server
+    connectToServer();
+
+    // Create a GameClient
+    createPlayer();
+
+    while(isClosed == false){
+      if(inLobby == false){
+        getOption();
+        if(option == 1){
+          createLobby();
+          connectToLobby();
+          if(inLobby == true){
+            GameClient gameClient = new GameClient();
+            startChat();
+
+          }
+        }else if(option == 2){
+          System.out.print("Lobby ID: ");
+          lobbyId = sc.nextLine();
+          connectToLobby();
+          if(inLobby == true){
+            GameClient gameClient = new GameClient();
+            startChat();
+          }
+        }else{
+          disconnectToServer();
+          break;
+        }
+      }
+    }
   }
 
   public static void startChat(){
-    new Thread(new ChatClient(server, inGameName)).start();
-      while(inLobby == true){
-        try{
-         inputLine = new BufferedReader(new InputStreamReader(System.in));
-    		 ChatPacket send = ChatPacket.newBuilder().setType(PacketType.CHAT).setMessage(inputLine.readLine()).build();
-    		 OutputStream outToServer = server.getOutputStream();
-    		 outToServer.write(send.toByteArray());
-         if(send.getMessage().trim().equals("exit")){
-           leaveLobby();
-         }
-    	 }catch(SocketTimeoutException s){
-    		 System.out.println("Socket timed out!");
-    	 }catch(IOException e){
-    		 e.printStackTrace();
-    		 System.out.println("Input/Output Error!");
-    	 }
-      }
+    new Thread(new ChatClient(server, inGameName, gameUI)).start();
+  }
+
+  public static void sendMessage(String message){
+    if(inLobby == true){
+      try{
+       ChatPacket send = ChatPacket.newBuilder().setType(PacketType.CHAT).setMessage(message).build();
+       OutputStream outToServer = server.getOutputStream();
+       outToServer.write(send.toByteArray());
+     }catch(SocketTimeoutException s){
+       System.out.println("Socket timed out!");
+     }catch(IOException e){
+       e.printStackTrace();
+       System.out.println("Input/Output Error!");
+     }
+    }
   }
 
   public static void getOption(){
