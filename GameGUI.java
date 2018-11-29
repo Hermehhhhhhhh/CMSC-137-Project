@@ -6,7 +6,9 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -27,10 +29,27 @@ public class GameGUI{
   GameClient gameProper;
 
   public GameGUI(GameClient gameProper){
-       this.gameProper = gameProper;
-       setUpMainFrame();
-       setUpChatPanel();
-       setUpGamePanel();
+     this.gameProper = gameProper;
+     setUpMainFrame();
+     // setUpHomeFrame();
+     setUpChatPanel();
+     setUpGamePanel();
+  }
+
+  public void setUpHomeFrame(){
+    JPanel titlePanel = new JPanel();
+    JTextField inGameName = new JTextField();
+    JTextField password = new JTextField();
+    JButton enter = new JButton("ENTER");
+
+    // titlePanel.add(new JLabel("In-Game-Name: "));
+    // titlePanel.add(inGameName);
+    // titlePanel.add(new JLabel("Password: "));
+    // titlePanel.add(password);
+    // titlePanel.add(enter);
+
+    titlePanel.setBackground(Color.black);
+    mainFrame.getContentPane().add(titlePanel, BorderLayout.CENTER);
   }
 
   public void setUpChatPanel(){
@@ -86,7 +105,7 @@ public class GameGUI{
   }
 
   public void setUpGamePanel(){
-    gamePanel.setBackground(Color.blue);
+    gamePanel.setBackground(Color.black);
     gamePanel.setPreferredSize(new Dimension(900,700));
     mainFrame.getContentPane().add(gamePanel, BorderLayout.LINE_END);
   }
