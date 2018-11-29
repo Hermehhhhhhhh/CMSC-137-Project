@@ -34,7 +34,10 @@ public class ChatClient implements Runnable{
 				inFromServer.read(response);
 
 				this.gameUI.receiveMessages(response);
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin
 			}
 	 }catch(SocketTimeoutException s){
 		 System.out.println("Socket timed out!");
