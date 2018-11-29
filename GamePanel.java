@@ -35,9 +35,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
     Random r;
 
 	public GamePanel(){
-		this.setBackground(Color.blue);
-    	this.setPreferredSize(new Dimension(900,700));
-    	this.addKeyListener(this);
+		this.setBackground(Color.black);
+    this.setPreferredSize(new Dimension(900,700));
+    this.addKeyListener(this);
 		this.addMouseMotionListener(this);
 
 		listOfDots = new ArrayList<Point>();

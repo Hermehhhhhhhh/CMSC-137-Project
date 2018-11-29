@@ -31,12 +31,7 @@ public class GameClient{
   }
 
   public static void main(String args[]){
-<<<<<<< HEAD
 
-    GameClient gameClient = new GameClient();
-
-=======
->>>>>>> origin
     // connect to server
     connectToServer();
 
@@ -50,23 +45,16 @@ public class GameClient{
           createLobby();
           connectToLobby();
           if(inLobby == true){
-<<<<<<< HEAD
-            startChat();
-=======
             GameClient gameClient = new GameClient();
             startChat();
 
->>>>>>> origin
           }
         }else if(option == 2){
           System.out.print("Lobby ID: ");
           lobbyId = sc.nextLine();
           connectToLobby();
           if(inLobby == true){
-<<<<<<< HEAD
-=======
             GameClient gameClient = new GameClient();
->>>>>>> origin
             startChat();
           }
         }else{

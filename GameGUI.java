@@ -16,23 +16,12 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-<<<<<<< HEAD
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import proto.PlayerProtos.Player;
-import proto.TcpPacketProtos.TcpPacket.*;
-import proto.TcpPacketProtos.TcpPacket;
-import java.net.*;
-import java.io.*;
-
-=======
 import java.io.IOException;
->>>>>>> origin
+
 public class GameGUI{
   JFrame mainFrame = new JFrame("RJ45.io");
   JPanel chatPanel = new JPanel();
-<<<<<<< HEAD
-  JPanel gamePanel = new JPanel();
+  GamePanel gamePanel = new GamePanel();
   JTextField messageGetter = new JTextField();
   JTextArea messageReceiver = new JTextArea(100,100);
   JScrollPane messageReceiverScroll = new JScrollPane();
@@ -61,21 +50,7 @@ public class GameGUI{
     titlePanel.setBackground(Color.black);
     mainFrame.getContentPane().add(titlePanel, BorderLayout.CENTER);
   }
-=======
-  GamePanel gamePanel = new GamePanel();
-  JTextField messageGetter = new JTextField();
-  JTextArea messageReceiver = new JTextArea(100,100);
-  GameClient gameProper;
 
-  public GameGUI(GameClient gameProper){
-       this.gameProper = gameProper;
-       setUpMainFrame();
-       // setUpHomeFrame();
-       setUpChatPanel();
-       setUpGamePanel();
-    }
-
->>>>>>> origin
 
   public void setUpChatPanel(){
     System.out.println("asddadasd");
@@ -130,15 +105,10 @@ public class GameGUI{
   }
 
   public void setUpGamePanel(){
-<<<<<<< HEAD
+
     gamePanel.setBackground(Color.black);
-    gamePanel.setPreferredSize(new Dimension(900,700));
+    // gamePanel.setPreferredSize(new Dimension(900,700));
     mainFrame.getContentPane().add(gamePanel, BorderLayout.LINE_END);
-=======
-    /*gamePanel.setBackground(Color.blue);
-    gamePanel.setPreferredSize(new Dimension(900,700));*/
-    //mainFrame.getContentPane().add(gamePanel, BorderLayout.LINE_END);
->>>>>>> origin
   }
 
   public void setUpMainFrame(){
