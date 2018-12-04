@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.RenderingHints;
+import client.GameGUI;
 
 public class GamePanel extends JPanel implements KeyListener, MouseMotionListener{
 	//private Game game;
@@ -33,12 +34,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
     int size = 10;
     int speed = 10;
     Random r;
+		GameGUI mainGUI;
 
-	public GamePanel(){
+
+	public GamePanel(GameGUI mainGUI){
 		this.setBackground(Color.black);
     this.setPreferredSize(new Dimension(900,700));
     this.addKeyListener(this);
 		this.addMouseMotionListener(this);
+		this.mainGUI = mainGUI;
 
 		listOfDots = new ArrayList<Point>();
         foods = new ArrayList<Point>();
@@ -137,6 +141,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
                 if(food.distance(n) < 20){
                     i.remove();
                     size++;
+										this.mainGUI.updateStatPanel();
                 }
             }
             repaint();
@@ -169,11 +174,19 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
 	@Override
 	public void mouseDragged(MouseEvent e){
-
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e){
 		//rj45.setLocation(e.getX() - 16, e.getY() + 40);
+	}
+
+
+	public int getScore(){
+		return(size);
+	}
+
+	public int getSpeed(){
+		return(speed);
 	}
 }
