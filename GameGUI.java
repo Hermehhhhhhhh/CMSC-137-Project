@@ -283,6 +283,7 @@ public class GameGUI{
   public void putChatGamePanel(JPanel toBeRemoved){
     mainFrame.remove(toBeRemoved);
     mainFrame.getContentPane().add(chatPanel, BorderLayout.WEST);
+    mainFrame.setBackground(Color.BLACK);
     mainFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
     mainFrame.revalidate();
     mainFrame.repaint();
