@@ -31,41 +31,16 @@ public class GameClient{
   }
 
   public static void main(String args[]){
-    // connect to server
     connectToServer();
 
-    // Create a GameClient
-    createPlayer();
+    GameClient gameClient = new GameClient();
 
-    while(isClosed == false){
-      if(inLobby == false){
-        getOption();
-        if(option == 1){
-          createLobby();
-          connectToLobby();
-          if(inLobby == true){
-            GameClient gameClient = new GameClient();
-            startChat();
-
-          }
-        }else if(option == 2){
-          System.out.print("Lobby ID: ");
-          lobbyId = sc.nextLine();
-          connectToLobby();
-          if(inLobby == true){
-            GameClient gameClient = new GameClient();
-            startChat();
-          }
-        }else{
-          disconnectToServer();
-          break;
-        }
-      }
-    }
   }
 
   public static void startChat(){
-    new Thread(new ChatClient(server, inGameName, gameUI)).start();
+    if(inLobby == true){
+      new Thread(new ChatClient(server, inGameName, gameUI)).start();
+    }
   }
 
   public static void sendMessage(String message){
@@ -92,14 +67,9 @@ public class GameClient{
     sc.nextLine();
   }
 
-  public static void createPlayer(){
-    // Get Username and Password
-    System.out.print("In-Game-Name: ");
-    inGameName = sc.nextLine();
-
-    System.out.print("Password: ");
-    password = sc.nextLine();
-
+  public static void createPlayer(String ign, String pw){
+    inGameName = ign;
+    password = pw;
     player = Player.newBuilder().setName(inGameName).build();
   }
 
@@ -128,6 +98,41 @@ public class GameClient{
 
       inLobby = true;
 	}
+
+  public static String connectToLobby(String lobbyId){
+    try{
+      ConnectPacket join = ConnectPacket.newBuilder().setType(PacketType.CONNECT).setPlayer(player).setLobbyId(lobbyId).build();
+
+      OutputStream outToServer = server.getOutputStream();
+      outToServer.write(join.toByteArray());
+
+      InputStream inFromServer = server.getInputStream();
+      while(inFromServer.available()==0){}
+
+      byte []response = new byte[inFromServer.available()];
+      inFromServer.read(response);
+
+      TcpPacket connectRequest = TcpPacket.parseFrom(response);
+      if(connectRequest.getType() == PacketType.CONNECT){
+        ConnectPacket connectPacket = ConnectPacket.parseFrom(response);
+        inLobby = true;
+        return("Connected");
+      }else if(connectRequest.getType() == PacketType.ERR_LDNE){
+        ErrLdnePacket lobbyDNE = ErrLdnePacket.parseFrom(response);
+        return("Lobby " + lobbyId + " does not exist.");
+      }else{
+        ErrLfullPacket lobbyFull = ErrLfullPacket.parseFrom(response);
+        return("Lobby " + lobbyId + " is full.");
+      }
+
+    }catch(SocketTimeoutException s){
+      System.out.println("Socket timed out!");
+    }catch(IOException e){
+      e.printStackTrace();
+      System.out.println("Input/Output Error!");
+    }
+    return("ERROR");
+  }
 
   public static void connectToLobby(){
     try{
@@ -196,6 +201,10 @@ public class GameClient{
       }catch(IOException e){
         e.printStackTrace();
       }
+  }
+
+  public static String getLobbyId(){
+    return(lobbyId);
   }
 
 }
