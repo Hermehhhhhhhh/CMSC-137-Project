@@ -12,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.lang.Exception;
-
 import java.util.ArrayList;
 import java.awt.Image;
 import java.awt.MouseInfo;
@@ -23,15 +22,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.RenderingHints;
-
 import java.io.*;
 import javax.imageio.*;
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
-
 import java.awt.Toolkit;
-
 import java.util.*;
 import javax.swing.*;
 import java.io.*;
@@ -48,6 +43,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
    Image img1 = Toolkit.getDefaultToolkit().getImage("images/m.png");
    Image img2 = Toolkit.getDefaultToolkit().getImage("images/food3.png");
    Image img3 = Toolkit.getDefaultToolkit().getImage("images/food1.png");
+
+   Image img4 = Toolkit.getDefaultToolkit().getImage("images/bricks.png");
 
    Boolean inGame = true;
 
@@ -119,19 +116,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setStroke(new BasicStroke(9 + (float) size / 10));
         for(int i = 1; i < listOfDots.size(); i++){
-             first = listOfDots.get(i);
+            first = listOfDots.get(i);
             if(i==listOfDots.size()-1){
                 g2.setColor(Color.WHITE);
                 g2.drawLine(first.x, first.y, last.x, last.y);
-                //last = new Point(first);
             }else{
-                //first = listOfDots.get(i);
                 g2.setColor(Color.BLUE);
                 g2.drawLine(first.x, first.y, last.x, last.y);
             }
-             last = new Point(first);
+            last = new Point(first);
         }
-
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);   
@@ -144,6 +138,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
             if (foodpic == 3) g2d.drawImage(img2, foods.get(i).x, foods.get(i).y, null);
             if (foodpic == 4) g2d.drawImage(img3, foods.get(i).x, foods.get(i).y, null);
         }
+
+        Graphics2D g2g = (Graphics2D) g;
+        g2g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
     }
 
 	public Point calcCoor(Point last, Point mouse){

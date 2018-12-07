@@ -5,6 +5,10 @@ import proto.PlayerProtos.Player;
 import java.util.Scanner;
 import java.net.*;
 import java.io.*;
+import java.awt.*;
+import java.awt.Color;
+//yimport javax.swing.*;
+import javax.swing.JFrame;
 
 import client.ChatClient;
 import client.GameGUI;
@@ -56,6 +60,27 @@ public class GameClient{
             GameClient gameClient = new GameClient();
             startChat();
           }
+        }else if(option == 3){
+          System.out.println("======================================================");
+          System.out.println("+                    GAME MANUAL                     +");
+          System.out.println("======================================================");
+          System.out.println("+ CHAT RULES                                         +");
+          System.out.println("+ 1.) A player will have an option to create a lobby +");
+          System.out.println("+     or join an exsistion lobby. Once a player      +");
+          System.out.println("+     already has a lobby, the game will start.      +");
+          System.out.println("+ GAME RULES                                         +");
+          System.out.println("+ 1.) Each player will spawn on the map on random    +");
+          System.out.println("+     coordinates as a computer cable                +");
+          System.out.println("+ 2.) The goal of each player is to eat the sparkling+");
+          System.out.println("+     C M S C foods across the map. Each food is     +");
+          System.out.println("+     worth 10 points                                +");
+          System.out.println("+ 3.) The player should avoid bumping into the map   +");
+          System.out.println("+     corners or to the body of another computer     +");
+          System.out.println("+     cable (player)                                 +");
+          System.out.println("+ 4.) The game will end once the player reached      +");
+          System.out.println("+     2000 score.                                    +");
+          System.out.println("======================================================");
+
         }else{
           disconnectToServer();
           break;
@@ -86,7 +111,8 @@ public class GameClient{
   public static void getOption(){
     System.out.println("[1] Create Lobby");
     System.out.println("[2] Join Lobby");
-    System.out.println("[3] Exit");
+    System.out.println("[3] Game Manual");
+    System.out.println("[4] Exit");
     System.out.print("> ");
     option = sc.nextInt();
     sc.nextLine();
