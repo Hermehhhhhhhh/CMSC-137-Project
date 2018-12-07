@@ -36,39 +36,39 @@ import java.awt.event.*;
 public class GamePanel extends JPanel implements KeyListener, MouseMotionListener{
 	//private Game game;
 	ArrayList<Point> listOfDots;
-    ArrayList<Point> foods;
-    Image OSC;
-    GameGUI mainGUI;
+	ArrayList<Point> foods;
+	Image OSC;
+	GameGUI mainGUI;
 
 
-   Image img = Toolkit.getDefaultToolkit().getImage("images/c.png");
-   Image img1 = Toolkit.getDefaultToolkit().getImage("images/m.png");
-   Image img2 = Toolkit.getDefaultToolkit().getImage("images/food3.png");
-   Image img3 = Toolkit.getDefaultToolkit().getImage("images/food1.png");
+	Image img = Toolkit.getDefaultToolkit().getImage("images/c.png");
+	Image img1 = Toolkit.getDefaultToolkit().getImage("images/m.png");
+	Image img2 = Toolkit.getDefaultToolkit().getImage("images/food3.png");
+	Image img3 = Toolkit.getDefaultToolkit().getImage("images/food1.png");
 
-   Image img4 = Toolkit.getDefaultToolkit().getImage("images/bricks.png");
+	Image img4 = Toolkit.getDefaultToolkit().getImage("images/bricks.png");
 
-   Boolean inGame = true;
+	Boolean inGame = true;
 
-   int playerscore = 0;
+	int playerscore = 0;
 
-    PointerInfo a = MouseInfo.getPointerInfo();
-    int size = 10;
-    int speed = 10;
-    Random r;
+	PointerInfo a = MouseInfo.getPointerInfo();
+	int size = 10;
+	int speed = 10;
+	Random r;
 
 	public GamePanel(GameGUI mainGUI){
 		this.mainGUI = mainGUI;
-		this.setBackground(Color.BLUE);
-    	this.setPreferredSize(new Dimension(900,700));
-    	this.addKeyListener(this);
+		this.setBackground(Color.BLACK);
+    this.setPreferredSize(new Dimension(900,700));
+    this.addKeyListener(this);
 		this.addMouseMotionListener(this);
-        this.setLayout(null);
+    this.setLayout(null);
 		listOfDots = new ArrayList<Point>();
-        foods = new ArrayList<Point>();
+    foods = new ArrayList<Point>();
 
-        r = new Random();
-        listOfDots.add(new Point(100, 100));
+    r = new Random();
+    listOfDots.add(new Point(100, 100));
 
 		Thread gameThread = new Thread(){
 			@Override
@@ -78,6 +78,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 		};
 		gameThread.start();
 	}
+
 	/*@Override*/
 	public void paintComponent(Graphics g) {
         if(inGame){
@@ -193,7 +194,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
                 Point food = i.next();
                 if(food.distance(n) < 20){
                     playerscore = playerscore +10;
-                    //System.out.println("Score: " + playerscore);
+										this.mainGUI.updateStatPanel();
                     i.remove();
                     size++;
                 }
@@ -208,63 +209,69 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 		}
 	}
 
-    private void checkCollision(){ //collision of sides palang
-        Point first = new Point();
-        first = listOfDots.get(listOfDots.size()-1);
-        if(first.x < 2){
-            inGame = false;
-            repaint();
-        }
-        if(first.x > 899){
-            inGame = false;
-            repaint();
-        }
-        if(first.y < 21){
-            inGame = false;
-            repaint();
-        }
-        if(first.y > 699){
-            inGame = false;
-            repaint();
-        }
+  private void checkCollision(){ //collision of sides palang
+      Point first = new Point();
+      first = listOfDots.get(listOfDots.size()-1);
+      if(first.x < 2){
+          inGame = false;
+          repaint();
+      }
+      if(first.x > 899){
+          inGame = false;
+          repaint();
+      }
+      if(first.y < 21){
+          inGame = false;
+          repaint();
+      }
+      if(first.y > 699){
+          inGame = false;
+          repaint();
+      }
 
 
-    }
+  }
 
-    public void gameOver(Graphics g){
+  public void gameOver(Graphics g){
 
-        // JFrame popout = new JFrame("Game Over!");
-        // popout.setPreferredSize(new Dimension(300, 100));
-        // popout.setBackground(Color.BLACK);
-        // popout.setVisible(true);
+      // JFrame popout = new JFrame("Game Over!");
+      // popout.setPreferredSize(new Dimension(300, 100));
+      // popout.setBackground(Color.BLACK);
+      // popout.setVisible(true);
 
-        // JButton b1 = new JButton("EXIT");
-        // b1.setBounds(50, 50, 50, 50);
-        // b1.addActionListener(new ActionListener() {
-        //     public void actionPerformed(ActionEvent e)
-        //     {
-        //         System.exit(0);
-        //     }
-        // });
+      // JButton b1 = new JButton("EXIT");
+      // b1.setBounds(50, 50, 50, 50);
+      // b1.addActionListener(new ActionListener() {
+      //     public void actionPerformed(ActionEvent e)
+      //     {
+      //         System.exit(0);
+      //     }
+      // });
 
-        // popout.add(b1);
-        // popout.pack();
+      // popout.add(b1);
+      // popout.pack();
 
-        String msg="GAME OVER";
-        String msg1="SCORE: " + playerscore;
+      String msg="GAME OVER";
+      String msg1="SCORE: " + playerscore;
 
-        Font small = new Font("Helvetica", Font.BOLD, 20);
-        FontMetrics metr = getFontMetrics(small);
+      Font small = new Font("Helvetica", Font.BOLD, 20);
+      FontMetrics metr = getFontMetrics(small);
 
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(msg, (900 - metr.stringWidth(msg))/2, 700/2);
-        g.drawString(msg1, (900 - metr.stringWidth(msg1))/2, (700/2)+30);
-
-
-    }
+      g.setColor(Color.white);
+      g.setFont(small);
+      g.drawString(msg, (900 - metr.stringWidth(msg))/2, 700/2);
+      g.drawString(msg1, (900 - metr.stringWidth(msg1))/2, (700/2)+30);
 
 
+  }
+
+	public int getScore(){
+		return(playerscore);
+	}
+
+	public int getSpeed(){
+		return(speed);
+	}
 
 
 	@Override
@@ -285,12 +292,4 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 	public void mouseMoved(MouseEvent e){
 		//rj45.setLocation(e.getX() - 16, e.getY() + 40);
 	}
-
-  public int getScore(){
-    return(size);
-  }
-
-  public int getSpeed(){
-    return(speed);
-  }
 }
