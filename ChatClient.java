@@ -22,24 +22,28 @@ public class ChatClient implements Runnable{
     this.server = server;
 		this.gameUI = gameUI;
 		this.inGameName =inGameName;
+
   }
 
 	public void run(){
 		try{
-			while(true){
+			while(gameUI.getInGame() == true){
 				InputStream inFromServer = server.getInputStream();
 				while(inFromServer.available()==0){}
 
 				byte []response = new byte[inFromServer.available()];
 				inFromServer.read(response);
+				TcpPacket reply = TcpPacket.parseFrom(response);
 
 				this.gameUI.receiveMessages(response);
 			}
+			System.out.println("-____-");
 	 }catch(SocketTimeoutException s){
 		 System.out.println("Socket timed out!");
 	 }catch(IOException e){
 		 e.printStackTrace();
 		 System.out.println("Input/Output Error!");
 	 }
+
 	}
 }

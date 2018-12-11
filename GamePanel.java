@@ -47,7 +47,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 	Image img3 = Toolkit.getDefaultToolkit().getImage("images/food1.png");
 
 	Image img4 = Toolkit.getDefaultToolkit().getImage("images/bricks.png");
-  Image img5 = Toolkit.getDefaultToolkit().getImage("images/galaxy.png");
 
 	Boolean inGame = true;
 
@@ -60,7 +59,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
 	public GamePanel(GameGUI mainGUI){
 		this.mainGUI = mainGUI;
-		this.setBackground(Color.RED);
+		this.setBackground(Color.BLACK);
     this.setPreferredSize(new Dimension(900,700));
     this.addKeyListener(this);
 		this.addMouseMotionListener(this);
@@ -124,9 +123,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
             first = listOfDots.get(i);
             if(i==listOfDots.size()-1){
                 g2.setColor(Color.WHITE);
-                //g2.drawImage(img5, last.x, last.y, null);
                 g2.drawLine(first.x, first.y, last.x, last.y);
-
             }else{
                 g2.setColor(Color.BLUE);
                 g2.drawLine(first.x, first.y, last.x, last.y);
@@ -169,40 +166,66 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
 	private void GameLoop(){
 		while(inGame){
-			try {
+						try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             checkCollision();
-            if(foods.size() < 200)
+            if(foods.size() < 150)
                 foods.add(new Point(r.nextInt(900), r.nextInt(900)));
+
+						// Get the location of mouse
             a = MouseInfo.getPointerInfo();
             Point p = a.getLocation();
-            Point last = listOfDots.get(listOfDots.size() - 1);
+
+						// get the last point of the snake
+						Point last = listOfDots.get(listOfDots.size() - 1);
             Point n = new Point();
 
-            if(last.distance(p) > 5){
+
+						//  Movement of snake
+          	if(last.distance(p) > 5){
+								// get the coordinates of new point
                 n = calcCoor(last, p);
+
+								// add the point to the head of the snake
                 listOfDots.add(n);
+
+								// remove the last point in tail every time you add a point to the head of the snake
                 if(listOfDots.size() >= size){
                     for(int i = 0; i < listOfDots.size() - size; i++){
                         listOfDots.remove(i);
                     }
                 }
-                // System.out.println(n);
             }
+
+						// Eating of food of snake
             Iterator<Point> i = foods.iterator();
+
+						// iterate every food
             while(i.hasNext()){
+
+								// get the point of the food
                 Point food = i.next();
+
+								// check if the snake ate the food
                 if(food.distance(n) < 20){
+										// add score
                     playerscore = playerscore +10;
+										// update the stat panel
 										this.mainGUI.updateStatPanel();
+										// remove the point that was already eaten by the snake
                     i.remove();
+
+										// add size to the snake
                     size++;
                 }
 
-                if(playerscore==3000){
+								//check if the score is greater than or equal to 3000
+                if(playerscore >=3000){
+										//  if game over
                     inGame = false;
                     repaint();
                     break;
@@ -212,7 +235,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 		}
 	}
 
-  private void checkCollision(){ //collision of sides palang
+  private void checkCollision(){ // collision of sides palang
       Point first = new Point();
       first = listOfDots.get(listOfDots.size()-1);
       if(first.x < 2){
@@ -237,23 +260,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
   public void gameOver(Graphics g){
 
-      // JFrame popout = new JFrame("Game Over!");
-      // popout.setPreferredSize(new Dimension(300, 100));
-      // popout.setBackground(Color.BLACK);
-      // popout.setVisible(true);
-
-      // JButton b1 = new JButton("EXIT");
-      // b1.setBounds(50, 50, 50, 50);
-      // b1.addActionListener(new ActionListener() {
-      //     public void actionPerformed(ActionEvent e)
-      //     {
-      //         System.exit(0);
-      //     }
-      // });
-
-      // popout.add(b1);
-      // popout.pack();
-
       String msg="GAME OVER";
       String msg1="SCORE: " + playerscore;
 
@@ -276,7 +282,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 		return(speed);
 	}
 
-
 	@Override
 	public void keyPressed(KeyEvent e){}
 
@@ -288,11 +293,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
 	@Override
 	public void mouseDragged(MouseEvent e){
-
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e){
-		//rj45.setLocation(e.getX() - 16, e.getY() + 40);
 	}
 }

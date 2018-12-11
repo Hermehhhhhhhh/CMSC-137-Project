@@ -36,9 +36,6 @@ import javax.swing.BorderFactory;
 
 public class GameGUI{
   JFrame mainFrame = new JFrame("RJ45.io");
-  
-
-
   JPanel chatPanel = new JPanel();
   JPanel statPanel = new JPanel(){
     @Override
@@ -53,7 +50,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel homePanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -67,7 +63,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel optionPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -81,7 +76,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel joinLobbyPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -95,7 +89,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel manualPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -109,7 +102,6 @@ public class GameGUI{
       }
     }
   };
-
   JScrollPane chatScroll;
   GamePanel gamePanel;
   JLabel scoreLabel = new JLabel("Score: 0");
@@ -118,6 +110,7 @@ public class GameGUI{
   JScrollPane messageReceiverScroll = new JScrollPane();
   GameClient gameProper;
   JLabel lobbyIDLabel;
+  boolean inGame = true;
 
   public GameGUI(GameClient gameProper){
      this.gameProper = gameProper;
@@ -214,6 +207,7 @@ public class GameGUI{
         gameProper.createLobby();
         lobbyIDLabel.setText("Lobby ID: "+ gameProper.getLobbyId());
         gameProper.connectToLobby();
+        inGame = true;
         gameProper.startChat();
         putChatGamePanel(optionPanel);
       }
@@ -273,7 +267,7 @@ public class GameGUI{
         String response = gameProper.connectToLobby(lobbyID.getText());
         if(response.equals("Connected")){
           gameProper.startChat();
-          lobbyIDLabel.setText("Lobby ID: "+ gameProper.getLobbyId());
+          lobbyIDLabel.setText("Lobby ID: " + lobbyID.getText());
           putChatGamePanel(joinLobbyPanel);
         }else{
           errorNotification.setText(response);
@@ -372,6 +366,7 @@ public class GameGUI{
   }
 
   public void receiveMessages(byte[] response){
+    String mess;
     try{
       TcpPacket reply = TcpPacket.parseFrom(response);
       if(reply.getType() == PacketType.CONNECT){
@@ -379,15 +374,22 @@ public class GameGUI{
         messageReceiver.append(received.getPlayer().getName() + " joined the lobby.\n");
       }else if(reply.getType() == PacketType.CHAT){
         ChatPacket received = ChatPacket.parseFrom(response);
-        // System.out.println(received.getPlayer().getName()+ ": "+ received.getMessage() + "\n");
-        messageReceiver.append(received.getPlayer().getName()+ ": "+ received.getMessage()+ "\n");
+        mess = received.getPlayer().getName()+ ": "+ received.getMessage()+ "\n";
+        messageReceiver.append(mess);
+        if(mess.equals(gameProper.getIGN() + ": "+ "restart"+ "\n")){
+          restart();
+        }else if(mess.equals(gameProper.getIGN() + ": "+ "exit"+ "\n")){
+          exit();
+        }
       }else if(reply.getType() == PacketType.DISCONNECT){
         DisconnectPacket received = DisconnectPacket.parseFrom(response);
         messageReceiver.append(received.getPlayer().getName() + " left the lobby.\n");
       }else{
         messageReceiver.append("ERROR!");
       }
-      messageReceiver.update(messageReceiver.getGraphics());
+      if(inGame == true){
+        messageReceiver.update(messageReceiver.getGraphics());
+      }
     }catch(IOException e){
  		 e.printStackTrace();
  		 System.out.println("Input/Output Error!");
@@ -410,7 +412,6 @@ public class GameGUI{
   }
 
   public void putChatGamePanel(JPanel toBeRemoved){
-   
     mainFrame.remove(toBeRemoved);
     mainFrame.getContentPane().add(chatPanel, BorderLayout.WEST);
     mainFrame.setBackground(Color.BLACK);
@@ -424,7 +425,31 @@ public class GameGUI{
   }
 
   public void updateStatPanel(){
-    scoreLabel.setText("Score: " +String.valueOf(gamePanel.getScore()));
+    scoreLabel.setText("Score: " + String.valueOf(gamePanel.getScore()));
   }
 
+  public void restart(){
+    mainFrame.remove(gamePanel);
+    gamePanel = new GamePanel(this);
+    mainFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
+    mainFrame.revalidate();
+    mainFrame.repaint();
+  }
+
+  public void exit(){
+    gameProper.leaveLobby();
+    gameProper.disconnectToServer();
+    gameProper.connectToServer();
+    mainFrame.remove(chatPanel);
+    mainFrame.remove(gamePanel);
+    mainFrame.getContentPane().add(optionPanel);
+    messageReceiver.setText("");
+    this.inGame = false;
+    mainFrame.revalidate();
+    mainFrame.repaint();
+  }
+
+  public boolean getInGame(){
+    return(this.inGame);
+  }
 }
