@@ -50,7 +50,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel homePanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -64,7 +63,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel optionPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -78,7 +76,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel joinLobbyPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -92,7 +89,6 @@ public class GameGUI{
       }
     }
   };
-
   JPanel manualPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -106,7 +102,6 @@ public class GameGUI{
       }
     }
   };
-
   JScrollPane chatScroll;
   GamePanel gamePanel;
   JLabel scoreLabel = new JLabel("Score: 0");
@@ -378,6 +373,12 @@ public class GameGUI{
         ChatPacket received = ChatPacket.parseFrom(response);
         // System.out.println(received.getPlayer().getName()+ ": "+ received.getMessage() + "\n");
         messageReceiver.append(received.getPlayer().getName()+ ": "+ received.getMessage()+ "\n");
+        if(received.getMessage().equals("restart")){
+          System.out.println("ASDaddsd");
+          restart();
+        }else if(received.getMessage().equals("exit")){
+          exit();
+        }
       }else if(reply.getType() == PacketType.DISCONNECT){
         DisconnectPacket received = DisconnectPacket.parseFrom(response);
         messageReceiver.append(received.getPlayer().getName() + " left the lobby.\n");
@@ -420,7 +421,25 @@ public class GameGUI{
   }
 
   public void updateStatPanel(){
-    scoreLabel.setText("Score: " +String.valueOf(gamePanel.getScore()));
+    scoreLabel.setText("Score: " + String.valueOf(gamePanel.getScore()));
+  }
+
+  public void restart(){
+    mainFrame.remove(gamePanel);
+    gamePanel = new GamePanel(this);
+    mainFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
+    mainFrame.revalidate();
+    mainFrame.repaint();
+  }
+
+  public void exit(){
+    mainFrame.remove(chatPanel);
+    mainFrame.remove(gamePanel);
+    mainFrame.getContentPane().add(optionPanel);
+    messageReceiver.setText("");
+    // gameProper.leaveLobby();
+    mainFrame.revalidate();
+    mainFrame.repaint();
   }
 
 }

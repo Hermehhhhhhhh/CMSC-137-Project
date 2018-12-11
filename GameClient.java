@@ -25,14 +25,17 @@ public class GameClient{
   private static String lobbyId;
   public static int option;
   public static GameGUI gameUI;
+  public static int score;
 
   public GameClient(){
+    // lagyan ng param na food
+
+    //  ipasa sa GUI yung food
     gameUI = new GameGUI(this);
   }
 
   public static void main(String args[]){
     connectToServer();
-
     GameClient gameClient = new GameClient();
 
   }
