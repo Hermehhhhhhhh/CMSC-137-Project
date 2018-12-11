@@ -40,7 +40,20 @@ public class GameGUI{
 
 
   JPanel chatPanel = new JPanel();
-  JPanel statPanel = new JPanel();
+  JPanel statPanel = new JPanel(){
+    @Override
+    protected void paintComponent(Graphics g) {
+      try{
+        URL imgURL = new File( "./resources/chatBG.jpg" ).toURI().toURL();
+        Image homeBG = ImageIO.read(imgURL);
+        super.paintComponent(g);
+        g.drawImage(homeBG, 0, 0, null);
+      }catch(IOException e){
+        e.printStackTrace();
+      }
+    }
+  };
+
   JPanel homePanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
@@ -54,7 +67,6 @@ public class GameGUI{
       }
     }
   };
-
 
   JPanel optionPanel = new JPanel(){
     @Override
@@ -135,7 +147,7 @@ public class GameGUI{
     pw.setForeground(Color.WHITE);
     pw.setBounds(340, 340, 150, 20);
     enter.setFont(new Font("Helvetica", Font.BOLD, 17));
-    inGameName.setBounds(470,250,300,50);   
+    inGameName.setBounds(470,250,300,50);
     password.setBounds(470,325,300,50);
     enter.setBounds(470,400,300,50);
     enter.setForeground(Color.CYAN);
@@ -287,7 +299,7 @@ public class GameGUI{
   }
 
   public void setUpManualPanel(){
-    
+
     JButton back = new JButton("BACK");
 
     back.setBounds(880,620,150,50);
@@ -297,7 +309,7 @@ public class GameGUI{
     back.setContentAreaFilled(false);
     back.setBorder(null);
 
-   
+
 
     back.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e){
@@ -312,10 +324,12 @@ public class GameGUI{
 
   public void setUpStatPanel(){
     lobbyIDLabel = new JLabel("Lobby ID: ");
-    statPanel.setPreferredSize(new Dimension(200,200));
+    statPanel.setPreferredSize(new Dimension(200,100));
 
-    scoreLabel.setBounds(50,15,150,20);
-    lobbyIDLabel.setBounds(50,35,150,20);
+    scoreLabel.setBounds(50,25,150,20);
+    scoreLabel.setForeground(Color.white);
+    lobbyIDLabel.setBounds(50,45,150,20);
+    lobbyIDLabel.setForeground(Color.white);
 
     statPanel.add(scoreLabel);
     statPanel.add(lobbyIDLabel);
@@ -340,9 +354,14 @@ public class GameGUI{
 
       }
     });
+    messageReceiver.setBackground(Color.BLACK);
+    messageReceiver.setForeground(Color.WHITE);
+
+    messageGetter.setBackground(Color.ORANGE);
+    messageGetter.setForeground(Color.BLACK);
 
     chatPanel.setLayout(new BorderLayout());
-    chatPanel.setBackground(Color.gray);
+
     chatPanel.setPreferredSize(new Dimension(300,700));
     messageReceiver.setEditable(false);
     chatScroll = new JScrollPane(messageReceiver);
