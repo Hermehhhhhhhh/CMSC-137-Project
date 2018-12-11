@@ -110,6 +110,7 @@ public class GameGUI{
   JScrollPane messageReceiverScroll = new JScrollPane();
   GameClient gameProper;
   JLabel lobbyIDLabel;
+  boolean inGame = true;
 
   public GameGUI(GameClient gameProper){
      this.gameProper = gameProper;
@@ -206,6 +207,7 @@ public class GameGUI{
         gameProper.createLobby();
         lobbyIDLabel.setText("Lobby ID: "+ gameProper.getLobbyId());
         gameProper.connectToLobby();
+        inGame = true;
         gameProper.startChat();
         putChatGamePanel(optionPanel);
       }
@@ -265,7 +267,7 @@ public class GameGUI{
         String response = gameProper.connectToLobby(lobbyID.getText());
         if(response.equals("Connected")){
           gameProper.startChat();
-          lobbyIDLabel.setText("Lobby ID: "+ gameProper.getLobbyId());
+          lobbyIDLabel.setText("Lobby ID: " + lobbyID.getText());
           putChatGamePanel(joinLobbyPanel);
         }else{
           errorNotification.setText(response);
@@ -364,6 +366,7 @@ public class GameGUI{
   }
 
   public void receiveMessages(byte[] response){
+    String mess;
     try{
       TcpPacket reply = TcpPacket.parseFrom(response);
       if(reply.getType() == PacketType.CONNECT){
@@ -371,12 +374,11 @@ public class GameGUI{
         messageReceiver.append(received.getPlayer().getName() + " joined the lobby.\n");
       }else if(reply.getType() == PacketType.CHAT){
         ChatPacket received = ChatPacket.parseFrom(response);
-        // System.out.println(received.getPlayer().getName()+ ": "+ received.getMessage() + "\n");
-        messageReceiver.append(received.getPlayer().getName()+ ": "+ received.getMessage()+ "\n");
-        if(received.getMessage().equals("restart")){
-          System.out.println("ASDaddsd");
+        mess = received.getPlayer().getName()+ ": "+ received.getMessage()+ "\n";
+        messageReceiver.append(mess);
+        if(mess.equals(gameProper.getIGN() + ": "+ "restart"+ "\n")){
           restart();
-        }else if(received.getMessage().equals("exit")){
+        }else if(mess.equals(gameProper.getIGN() + ": "+ "exit"+ "\n")){
           exit();
         }
       }else if(reply.getType() == PacketType.DISCONNECT){
@@ -385,7 +387,9 @@ public class GameGUI{
       }else{
         messageReceiver.append("ERROR!");
       }
-      messageReceiver.update(messageReceiver.getGraphics());
+      if(inGame == true){
+        messageReceiver.update(messageReceiver.getGraphics());
+      }
     }catch(IOException e){
  		 e.printStackTrace();
  		 System.out.println("Input/Output Error!");
@@ -433,13 +437,19 @@ public class GameGUI{
   }
 
   public void exit(){
+    gameProper.leaveLobby();
+    gameProper.disconnectToServer();
+    gameProper.connectToServer();
     mainFrame.remove(chatPanel);
     mainFrame.remove(gamePanel);
     mainFrame.getContentPane().add(optionPanel);
     messageReceiver.setText("");
-    // gameProper.leaveLobby();
+    this.inGame = false;
     mainFrame.revalidate();
     mainFrame.repaint();
   }
 
+  public boolean getInGame(){
+    return(this.inGame);
+  }
 }

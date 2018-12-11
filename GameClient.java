@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.net.*;
 import java.io.*;
 
+import server.GameReceiver;
 import client.ChatClient;
 import client.GameGUI;
 
@@ -28,16 +29,13 @@ public class GameClient{
   public static int score;
 
   public GameClient(){
-    // lagyan ng param na food
-
-    //  ipasa sa GUI yung food
     gameUI = new GameGUI(this);
+
   }
 
   public static void main(String args[]){
     connectToServer();
     GameClient gameClient = new GameClient();
-
   }
 
   public static void startChat(){
@@ -61,15 +59,6 @@ public class GameClient{
     }
   }
 
-  public static void getOption(){
-    System.out.println("[1] Create Lobby");
-    System.out.println("[2] Join Lobby");
-    System.out.println("[3] Exit");
-    System.out.print("> ");
-    option = sc.nextInt();
-    sc.nextLine();
-  }
-
   public static void createPlayer(String ign, String pw){
     inGameName = ign;
     password = pw;
@@ -78,13 +67,14 @@ public class GameClient{
 
   public static void createLobby(){
   		try{
-  			CreateLobbyPacket request = CreateLobbyPacket.newBuilder().setMaxPlayers(5).setType(PacketType.CREATE_LOBBY).build();
+        CreateLobbyPacket request = CreateLobbyPacket.newBuilder().setMaxPlayers(5).setType(PacketType.CREATE_LOBBY).build();
 
   			OutputStream outToServer = server.getOutputStream();
   			outToServer.write(request.toByteArray());
 
   			InputStream inFromServer = server.getInputStream();
-  			while(inFromServer.available()==0){}
+  			while(inFromServer.available()==0){
+        }
 
   			byte []response = new byte[inFromServer.available()];
     		inFromServer.read(response);
@@ -200,7 +190,6 @@ public class GameClient{
         OutputStream outToServer = server.getOutputStream();
         outToServer.write(dis.toByteArray());
         inLobby = false;
-        sc.nextLine();
       }catch(IOException e){
         e.printStackTrace();
       }
@@ -208,6 +197,10 @@ public class GameClient{
 
   public static String getLobbyId(){
     return(lobbyId);
+  }
+
+  public static String getIGN(){
+    return(inGameName);
   }
 
 }

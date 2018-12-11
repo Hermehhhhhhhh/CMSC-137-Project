@@ -282,7 +282,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 		return(speed);
 	}
 
-
 	@Override
 	public void keyPressed(KeyEvent e){}
 
