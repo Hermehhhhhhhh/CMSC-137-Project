@@ -36,6 +36,9 @@ import javax.swing.BorderFactory;
 
 public class GameGUI{
   JFrame mainFrame = new JFrame("RJ45.io");
+  
+
+
   JPanel chatPanel = new JPanel();
   JPanel statPanel = new JPanel();
   JPanel homePanel = new JPanel(){
@@ -287,7 +290,7 @@ public class GameGUI{
     
     JButton back = new JButton("BACK");
 
-    back.setBounds(850,640,150,50);
+    back.setBounds(880,620,150,50);
     back.setOpaque(false);
     back.setForeground(Color.RED);
     back.setFont(new Font("Helvetica", Font.BOLD, 25));
@@ -388,6 +391,7 @@ public class GameGUI{
   }
 
   public void putChatGamePanel(JPanel toBeRemoved){
+   
     mainFrame.remove(toBeRemoved);
     mainFrame.getContentPane().add(chatPanel, BorderLayout.WEST);
     mainFrame.setBackground(Color.BLACK);

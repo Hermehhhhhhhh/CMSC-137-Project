@@ -1,0 +1,11 @@
+How to Run:
+	javac -d . *.java && java client/GameClient
+
+How to start a game:
+	1. Enter a user name and password
+	2. Create a lobby or join an existing lobby
+
+Game Includes:
+	1. In-game Chat
+	2. Game interface
+

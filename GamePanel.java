@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 	Image img3 = Toolkit.getDefaultToolkit().getImage("images/food1.png");
 
 	Image img4 = Toolkit.getDefaultToolkit().getImage("images/bricks.png");
+  Image img5 = Toolkit.getDefaultToolkit().getImage("images/galaxy.png");
 
 	Boolean inGame = true;
 
@@ -59,7 +60,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
 
 	public GamePanel(GameGUI mainGUI){
 		this.mainGUI = mainGUI;
-		this.setBackground(Color.BLACK);
+		this.setBackground(Color.RED);
     this.setPreferredSize(new Dimension(900,700));
     this.addKeyListener(this);
 		this.addMouseMotionListener(this);
@@ -123,7 +124,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
             first = listOfDots.get(i);
             if(i==listOfDots.size()-1){
                 g2.setColor(Color.WHITE);
+                //g2.drawImage(img5, last.x, last.y, null);
                 g2.drawLine(first.x, first.y, last.x, last.y);
+
             }else{
                 g2.setColor(Color.BLUE);
                 g2.drawLine(first.x, first.y, last.x, last.y);
@@ -172,7 +175,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
                 e.printStackTrace();
             }
             checkCollision();
-            if(foods.size() < 150)
+            if(foods.size() < 200)
                 foods.add(new Point(r.nextInt(900), r.nextInt(900)));
             a = MouseInfo.getPointerInfo();
             Point p = a.getLocation();
@@ -199,7 +202,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseMotionListene
                     size++;
                 }
 
-                if(playerscore==1000){
+                if(playerscore==3000){
                     inGame = false;
                     repaint();
                     break;
