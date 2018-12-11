@@ -25,16 +25,37 @@ import java.io.File;
 import java.net.MalformedURLException;
 import javax.imageio.ImageIO;
 import java.net.URL;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.util.*;
+import javax.swing.*;
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.BorderFactory;
 
 public class GameGUI{
   JFrame mainFrame = new JFrame("RJ45.io");
   JPanel chatPanel = new JPanel();
-  JPanel statPanel = new JPanel();
+  JPanel statPanel = new JPanel(){
+    @Override
+    protected void paintComponent(Graphics g) {
+      try{
+        URL imgURL = new File( "./resources/chatBG.jpg" ).toURI().toURL();
+        Image homeBG = ImageIO.read(imgURL);
+        super.paintComponent(g);
+        g.drawImage(homeBG, 0, 0, null);
+      }catch(IOException e){
+        e.printStackTrace();
+      }
+    }
+  };
+
   JPanel homePanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
       try{
-        URL imgURL = new File( "./resources/homeBG.jpg" ).toURI().toURL();
+        URL imgURL = new File( "./resources/BG2.png" ).toURI().toURL();
         Image homeBG = ImageIO.read(imgURL);
         super.paintComponent(g);
         g.drawImage(homeBG, 0, 0, null);
@@ -43,11 +64,12 @@ public class GameGUI{
       }
     }
   };
+
   JPanel optionPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
       try{
-        URL imgURL = new File( "./resources/homeBG.jpg" ).toURI().toURL();
+        URL imgURL = new File( "./resources/BG4.png" ).toURI().toURL();
         Image homeBG = ImageIO.read(imgURL);
         super.paintComponent(g);
         g.drawImage(homeBG, 0, 0, null);
@@ -56,11 +78,12 @@ public class GameGUI{
       }
     }
   };
+
   JPanel joinLobbyPanel = new JPanel(){
     @Override
     protected void paintComponent(Graphics g) {
       try{
-        URL imgURL = new File( "./resources/homeBG.jpg" ).toURI().toURL();
+        URL imgURL = new File( "./resources/BG4.png" ).toURI().toURL();
         Image homeBG = ImageIO.read(imgURL);
         super.paintComponent(g);
         g.drawImage(homeBG, 0, 0, null);
@@ -68,7 +91,22 @@ public class GameGUI{
         e.printStackTrace();
       }
     }
-  } ;
+  };
+
+  JPanel manualPanel = new JPanel(){
+    @Override
+    protected void paintComponent(Graphics g) {
+      try{
+        URL imgURL = new File( "./resources/BG5.png" ).toURI().toURL();
+        Image homeBG = ImageIO.read(imgURL);
+        super.paintComponent(g);
+        g.drawImage(homeBG, 0, 0, null);
+      }catch(IOException e){
+        e.printStackTrace();
+      }
+    }
+  };
+
   JScrollPane chatScroll;
   GamePanel gamePanel;
   JLabel scoreLabel = new JLabel("Score: 0");
@@ -87,6 +125,7 @@ public class GameGUI{
      setUpChatPanel();
      setUpGamePanel();
      setUpJoinLobbyPanel();
+     setUpManualPanel();
 
      mainFrame.getContentPane().add(homePanel);
   }
@@ -94,15 +133,23 @@ public class GameGUI{
   public void setUpHomePanel(){
     JTextField inGameName = new JTextField();
     JTextField password = new JTextField();
-    JLabel ign = new JLabel("In-Game-Name: ");
+    JLabel ign = new JLabel("InGame-Name: ");
     JLabel pw = new JLabel("Password: ");
     JButton enter = new JButton("ENTER");
 
-    ign.setBounds(375, 265, 150, 20);
-    inGameName.setBounds(500,250,300,50);
-    pw.setBounds(405, 340, 150, 20);
-    password.setBounds(500,325,300,50);
-    enter.setBounds(500,400,300,50);
+    ign.setFont(new Font("Helvetica", Font.BOLD, 17));
+    ign.setForeground(Color.WHITE);
+    ign.setBounds(300, 265, 150, 20);
+    pw.setFont(new Font("Helvetica", Font.BOLD, 18));
+    pw.setForeground(Color.WHITE);
+    pw.setBounds(340, 340, 150, 20);
+    enter.setFont(new Font("Helvetica", Font.BOLD, 17));
+    inGameName.setBounds(470,250,300,50);
+    password.setBounds(470,325,300,50);
+    enter.setBounds(470,400,300,50);
+    enter.setForeground(Color.CYAN);
+    enter.setContentAreaFilled(false);
+    enter.setOpaque(false);
     enter.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         gameProper.createPlayer(inGameName.getText(), password.getText());
@@ -123,10 +170,35 @@ public class GameGUI{
     JButton createLobbyButton = new JButton("CREATE LOBBY");
     JButton joinLobbyButton = new JButton("JOIN LOBBY");
     JButton exitButton = new JButton("EXIT");
+    JButton manual = new JButton("GAME MANUAL");
 
-    createLobbyButton.setBounds(450,250,300,50);
-    joinLobbyButton.setBounds(450,350,300,50);
-    exitButton.setBounds(450,450,300,50);
+    createLobbyButton.setBounds(460,325,300,50);
+    createLobbyButton.setOpaque(false);
+    createLobbyButton.setForeground(Color.BLACK);
+    createLobbyButton.setFont(new Font("Helvetica", Font.BOLD, 25));
+    createLobbyButton.setContentAreaFilled(false);
+    createLobbyButton.setBorder(null);
+
+    joinLobbyButton.setBounds(460,380,300,50);
+    joinLobbyButton.setOpaque(false);
+    joinLobbyButton.setForeground(Color.BLACK);
+    joinLobbyButton.setFont(new Font("Helvetica", Font.BOLD, 25));
+    joinLobbyButton.setContentAreaFilled(false);
+    joinLobbyButton.setBorder(null);
+
+    manual.setBounds(460,445,300,50);
+    manual.setOpaque(false);
+    manual.setForeground(Color.BLACK);
+    manual.setFont(new Font("Helvetica", Font.BOLD, 25));
+    manual.setContentAreaFilled(false);
+    manual.setBorder(null);
+
+    exitButton.setBounds(460,505,300,50);
+    exitButton.setOpaque(false);
+    exitButton.setForeground(Color.RED);
+    exitButton.setFont(new Font("Helvetica", Font.BOLD, 25));
+    exitButton.setContentAreaFilled(false);
+    exitButton.setBorder(null);
 
     joinLobbyButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -149,26 +221,49 @@ public class GameGUI{
         changePanel(optionPanel, homePanel);
       }
     } );
+    manual.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        changePanel(optionPanel, manualPanel);
+      }
+    } );
 
     optionPanel.add(createLobbyButton);
     optionPanel.add(joinLobbyButton);
+    optionPanel.add(manual);
     optionPanel.add(exitButton);
     optionPanel.setLayout(null);
   }
 
   public void setUpJoinLobbyPanel(){
     JTextField lobbyID = new JTextField();
-    JLabel lid = new JLabel("Lobby ID: ");
+    JLabel lid = new JLabel("ENTER LOBBY ID");
     JLabel errorNotification = new JLabel("");
     JButton enter = new JButton("ENTER");
     JButton back = new JButton("BACK");
 
-    lid.setBounds(375, 265, 150, 20);
-    lobbyID.setBounds(500,250,300,50);
-    errorNotification.setBounds(500, 315, 350, 20);
+    lid.setBounds(515, 350, 200, 20);
+    lid.setFont(new Font("Helvetica", Font.BOLD, 20));
+    lid.setForeground(Color.BLACK);
+
+
+    lobbyID.setBounds(510,385,200,50);
+
+    errorNotification.setBounds(510, 455, 400, 20);
     errorNotification.setForeground(Color.RED);
-    back.setBounds(500,350,150,50);
-    enter.setBounds(650,350,150,50);
+
+    back.setBounds(460,490,150,50);
+    back.setOpaque(false);
+    back.setForeground(Color.RED);
+    back.setFont(new Font("Helvetica", Font.BOLD, 25));
+    back.setContentAreaFilled(false);
+    back.setBorder(null);
+
+    enter.setBounds(610,490,150,50);
+    enter.setOpaque(false);
+    enter.setForeground(Color.GREEN);
+    enter.setFont(new Font("Helvetica", Font.BOLD, 25));
+    enter.setContentAreaFilled(false);
+    enter.setBorder(null);
 
     enter.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -200,12 +295,38 @@ public class GameGUI{
     joinLobbyPanel.setLayout(null);
   }
 
+  public void setUpManualPanel(){
+
+    JButton back = new JButton("BACK");
+
+    back.setBounds(850,640,150,50);
+    back.setOpaque(false);
+    back.setForeground(Color.RED);
+    back.setFont(new Font("Helvetica", Font.BOLD, 25));
+    back.setContentAreaFilled(false);
+    back.setBorder(null);
+
+
+
+    back.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e){
+        changePanel(manualPanel, optionPanel);
+      }
+    } );
+
+    manualPanel.add(back);
+    manualPanel.add(back);
+    manualPanel.setLayout(null);
+  }
+
   public void setUpStatPanel(){
     lobbyIDLabel = new JLabel("Lobby ID: ");
-    statPanel.setPreferredSize(new Dimension(200,200));
+    statPanel.setPreferredSize(new Dimension(200,100));
 
-    scoreLabel.setBounds(50,15,150,20);
-    lobbyIDLabel.setBounds(50,35,150,20);
+    scoreLabel.setBounds(50,25,150,20);
+    scoreLabel.setForeground(Color.white);
+    lobbyIDLabel.setBounds(50,45,150,20);
+    lobbyIDLabel.setForeground(Color.white);
 
     statPanel.add(scoreLabel);
     statPanel.add(lobbyIDLabel);
@@ -230,9 +351,14 @@ public class GameGUI{
 
       }
     });
+    messageReceiver.setBackground(Color.BLACK);
+    messageReceiver.setForeground(Color.WHITE);
+
+    messageGetter.setBackground(Color.ORANGE);
+    messageGetter.setForeground(Color.BLACK);
 
     chatPanel.setLayout(new BorderLayout());
-    chatPanel.setBackground(Color.gray);
+
     chatPanel.setPreferredSize(new Dimension(300,700));
     messageReceiver.setEditable(false);
     chatScroll = new JScrollPane(messageReceiver);
@@ -283,6 +409,7 @@ public class GameGUI{
   public void putChatGamePanel(JPanel toBeRemoved){
     mainFrame.remove(toBeRemoved);
     mainFrame.getContentPane().add(chatPanel, BorderLayout.WEST);
+    mainFrame.setBackground(Color.BLACK);
     mainFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
     mainFrame.revalidate();
     mainFrame.repaint();
